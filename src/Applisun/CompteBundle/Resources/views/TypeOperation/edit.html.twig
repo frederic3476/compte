@@ -1,0 +1,15 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+
+{% block content %}
+    <h1>Editer type opération</h1>
+
+    {{ form(edit_form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a class="btn btn-primary" href="{{ path('typeoperation') }}">
+            Retourner à la liste
+        </a>
+    </li>
+</ul>
+{% endblock %}

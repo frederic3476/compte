@@ -1,0 +1,169 @@
+{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+{% form_theme form 'ApplisunCompteBundle:Form:fields.html.twig' %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li><a href="{{ path('homepage') }}">Accueil</a></li>
+        <li><a href="{{ path('compte') }}">Mes comptes</a></li>
+        <li class="active">Graphique du compte n°{{ entity.numero }} année {{ year }}</li>
+    </ul>
+    <div class="row">
+        <div id="img-compte" class="col-sm-2 col-xs-3">
+            <img class="img-rounded" src="{{ asset('uploads/banques/'~entity.banque.logo) }}"/>
+        </div>    
+        <div id="compte_name" class="col-sm-5 col-xs-9">
+            <div class="row">
+                <aside>
+                    <h2>Compte {{ entity.type }}</h2>
+                    <h2>N°{{ entity.numero }}</h2>
+                </aside>
+                <aside>
+                    <h2>Solde : {{ entity.solde }} &euro;</h2>
+                </aside>
+            </div>
+        </div>
+        <div id="operation_form" class="col-sm-5">
+            {% if year == "now"|date('Y') %}
+                <h2>Ajouter une opération</h2>
+                {% include 'ApplisunCompteBundle:Operation:_operationForm.html.twig' with {'form': form} %} 
+            {% endif %}
+        </div>
+    </div>
+
+    {{ include('ApplisunCompteBundle::success_message.html.twig') }}
+    {% if year == "now"|date('Y') %}
+        <blockquote>
+            <h2>Liste des opérations en {{ year }}</h2>
+        </blockquote>
+    {% else %}
+        <blockquote>
+            <h2>Opérations archives de {{ year }}</h2>    
+        </blockquote>    
+    {% endif %}
+
+    <div class="row">
+        <div class="col-xs-1">
+            <select id="selectYear" class="bootstrap-select btn-primary">
+                <option value="">Année</option>
+                {% for i in firstYear.."now"|date('Y') %}                 
+                    <option value="{{ path('compte_show', { 'id': entity.id, 'year': i}) }}">{{ i }}</option>
+                {% endfor %} 
+            </select> 
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li {% if "now"|date('m') == "01" %} class="active" {% endif %}><a href="#janvier" data-toggle="tab">Janvier</a></li>
+                <li {% if "now"|date('m') == "02" %} class="active" {% endif %}><a href="#fevrier" data-toggle="tab">Fevrier</a></li>
+                <li {% if "now"|date('m') == "03" %} class="active" {% endif %}><a href="#mars" data-toggle="tab">Mars</a></li>
+                <li {% if "now"|date('m') == "04" %} class="active" {% endif %}><a href="#avril" data-toggle="tab">Avril</a></li>
+                <li {% if "now"|date('m') == "05" %} class="active" {% endif %}><a href="#mai" data-toggle="tab">Mai</a></li>
+                <li {% if "now"|date('m') == "06" %} class="active" {% endif %}><a href="#juin" data-toggle="tab">Juin</a></li>
+                <li {% if "now"|date('m') == "07" %} class="active" {% endif %}><a href="#juillet" data-toggle="tab">Juillet</a></li>
+                <li {% if "now"|date('m') == "08" %} class="active" {% endif %}><a href="#aout" data-toggle="tab">Août</a></li>
+                <li {% if "now"|date('m') == "09" %} class="active" {% endif %}><a href="#septembre" data-toggle="tab">Septembre</a></li>
+                <li {% if "now"|date('m') == "10" %} class="active" {% endif %}><a href="#octobre" data-toggle="tab">Octobre</a></li>
+                <li {% if "now"|date('m') == "11" %} class="active" {% endif %}><a href="#novembre" data-toggle="tab">Novembre</a></li>
+                <li {% if "now"|date('m') == "12" %} class="active" {% endif %}><a href="#decembre" data-toggle="tab">Décembre</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-9"> 
+            <div class="tab-content">
+                <div class="tab-pane fade {% if "now"|date('m') == "01" %}active in{% endif %}" id="janvier">
+                    <div id='ope_01' class="row">
+                        {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'month': '01', 'year': year, 'compteId': entity.id, 'page': page })) }}
+                    </div>    
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '01', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>    
+                <div class="tab-pane fade {% if "now"|date('m') == "02" %}active in{% endif %}" id="fevrier">
+                    <div id='ope_02' class="row">
+                        {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '02', 'year': year, 'compteId': entity.id })) }}
+                    </div>    
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '02', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>
+                <div class="tab-pane fade {% if "now"|date('m') == "03" %}active in{% endif %}" id="mars">
+                    <div id='ope_03' class="row">
+                        {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '03', 'year': year, 'compteId': entity.id })) }}
+                    </div>    
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '03', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>
+                <div class="tab-pane fade {% if "now"|date('m') == "04" %}active in{% endif %}" id="avril">
+                    <div id='ope_04' class="row">
+                        {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '04', 'year': year, 'compteId': entity.id })) }}
+                    </div>    
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '04', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>    
+                <div class="tab-pane fade {% if "now"|date('m') == "05" %}active in{% endif %}" id="mai">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '05', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '05', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>
+                <div class="tab-pane fade {% if "now"|date('m') == "06" %}active in{% endif %}" id="juin">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '06', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '06', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div> 
+                <div class="tab-pane fade {% if "now"|date('m') == "07" %}active in{% endif %}" id="juillet">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '07', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '07', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>    
+                <div class="tab-pane fade {% if "now"|date('m') == "08" %}active in{% endif %}" id="aout">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '08', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '08', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>
+                <div class="tab-pane fade {% if "now"|date('m') == "09" %}active in{% endif %}" id="septembre">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '09', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '09', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div> 
+                <div class="tab-pane fade {% if "now"|date('m') == "10" %}active in{% endif %}" id="octobre">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '10', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '10', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>    
+                <div class="tab-pane fade {% if "now"|date('m') == "11" %}active in{% endif %}" id="novembre">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '11', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '11', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div>
+                <div class="tab-pane fade {% if "now"|date('m') == "12" %}active in{% endif %}" id="decembre">
+                    {{ render_esi(controller('ApplisunCompteBundle:Operation:operationList', { 'page': page, 'month': '12', 'year': year, 'compteId': entity.id })) }}
+                    <div class="row hidden-xxs">
+                        {{ render_esi(controller('ApplisunCompteBundle:Graphic:graphicOperation', { 'month': '12', 'year': year, 'compteId': entity.id })) }}
+                    </div>
+                </div> 
+            </div>      
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#selectYear").change(function (elt) {
+                if ($(this).val() != "")
+                {
+                    window.location = $(this).val();
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

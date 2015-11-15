@@ -1,0 +1,30 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+{% block content %}
+    <h1>Message</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category</th>
+                <th>Texte</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('message_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.category }}</td>
+                <td>{{ entity.texte }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('message_edit', { 'id': entity.id }) }}">Editer</a>
+                    <a class="btn btn-primary" href="{{ path('message_delete', { 'id': entity.id }) }}" onclick="if(!confirm('Etes-voius sûr ?')) { return false; }">Supprimer</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+            <a class="btn btn-primary" href="{{ path('message_new') }}">
+                Ajouter un nouveau message
+            </a>
+    {% endblock %}

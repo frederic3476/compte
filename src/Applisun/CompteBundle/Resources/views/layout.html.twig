@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      {% block title %}
+        Gestion de compte personnel
+      {% endblock %}
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('bundles/applisuncompte/bootstrap/css/bootstrap.css') }}" type="text/css" media="all" />
+      <link rel="stylesheet" href="{{ asset('bundles/applisuncompte/css/main.css') }}" type="text/css" media="all" />
+    {% endblock %}
+    {#
+    {% javascripts
+        '@ApplisunCompteBundle/Resources/public/js/jquery.min.js'
+        '@ApplisunCompteBundle/Resources/public/js/bootstrap.js'
+        '@ApplisunCompteBundle/Resources/public/highcharts/js/highcharts.js'
+        '@ApplisunCompteBundle/Resources/public/highcharts/js/modules/exporting.js' filter='?yui_js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}  
+    #}
+    
+    {% block javascripts %}
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/bootstrap.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/highcharts/js/highcharts.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/highcharts/js/modules/exporting.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/main.js') }}"></script>
+    {% endblock %}
+    
+    <link rel="shortcut icon" href="" />
+  </head>
+  <body>
+      <div class="container">
+          {% block navbar %}
+           <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="" class="navbar-brand">
+                        <img src="{{ asset('bundles/applisuncompte/images/logoMacomptatete2.png') }}" />
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">    
+                    <ul class="nav navbar-nav">
+                      <li {% if app.request.attributes.get('_route') matches '/homepage/' %}class="active"{% endif %}> 
+                          <a href="{{ path('homepage') }}">Accueil</a> 
+                      </li>
+                      {% if is_granted('ROLE_USER') %}
+                      <li id="dropdown-toggle" class="btn-group dropdown-toggle {% if app.request.attributes.get('_route') matches '/compte/' %}active{% endif %}"> 
+                          <a href="{{ path('compte') }}">Mes comptes<b class="caret"></b></a>
+                          <ul class="dropdown-menu" id="dropdown-menu">
+                            <li><a href="{{ path('compte') }}">Tous mes comptes</a></li>
+                            <li><a href="{{ path('compte_type', { 'type': 'courant'}) }}">Courant</a></li>
+                            <li><a href="#">Epargne</a></li>
+                            <li><a href="#">Autres</a></li>
+                          </ul>  
+                      </li>
+
+                      <li {% if app.request.attributes.get('_route') matches '/user/' and is_granted('ROLE_USER') %}class="active"{% endif %}> 
+                          <a href="{{ path('user_show', { 'id': app.security.getToken().getUser().getId() }) }}">
+                              Voir mon profil
+                          </a>    
+                      </li>
+                      {% endif %} 
+                      <li class="visible-lg"><a href="{{ path('backend') }}">Backend</a> </li>
+                    </ul>
+                    <form action={{ path('operation_search', {'page': 1}) }} method="get" class="navbar-form navbar-right inline-form">
+                      <div class="form-group">                      
+                        {% if is_granted('ROLE_USER') %}
+                          <div class="inner-addon right-addon">
+                              <i class="glyphicon glyphicon-search"></i>
+                              <input type="search" class="input-sm form-control" placeholder="Rechercher..." name="query" value='{{ app.request.get('query') }}' id="search_keywords" />
+                          </div>                           
+                          <a href="{{ path('logout') }}" class="btn btn-primary btn-sm">
+                              <span class="glyphicon glyphicon-remove-circle"></span> 
+                              Deconnexion
+                          </a>
+                        {% else %}
+                          <a href="{{ path('login') }}" class="btn btn-primary btn-sm">
+                              <span class="glyphicon glyphicon-user"></span> 
+                              Connexion
+                          </a>
+                        {% endif %}    
+                      </div>
+                    </form>
+                </div>
+            </div>         
+          </nav>
+          {% endblock %}  
+          <div id="main_content">
+            {% block content %}
+            {% endblock %}
+          </div>
+          {% block footer %}
+          <footer>
+              <div class="container">
+                  <div class="row">
+                    <div class="col-lg-8">
+                        Applisun copyright 2014
+                    </div>
+                    <div class="col-lg-4>
+                         {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('compte') }}">Mes comptes</a>
+                            <a href="{{ path('user_show', { 'id': app.security.getToken().getUser().getId() }) }}">Mon profil</a>
+                         {% endif %}  
+                    </div>
+                  </div>
+              </div>  
+          </footer>
+          {% endblock %}
+          {% block modal %}
+              <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+                   aria-labelledby="myModalLabel" aria-hidden="true">
+                    
+                   <div class="modal-dialog">
+                       <button type="button" class="btn btn-default" 
+                              data-dismiss="modal">Fermer
+                        </button> 
+                        <div class="modal-content">                                       
+                        </div>                        
+                   </div>
+                </div>    
+                       
+               <!-- /.modal -->
+          {% endblock %}
+      </div>
+      <script type="text/javascript">
+        
+        $("#dropdown-toggle").hover(function() {
+              $('#dropdown-menu').show();
+            },
+            function(){
+              $('#dropdown-menu').hide();
+            }
+        );
+        </script>
+  </body>
+</html>

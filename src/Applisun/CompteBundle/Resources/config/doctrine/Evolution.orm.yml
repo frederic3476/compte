@@ -1,0 +1,22 @@
+Applisun\CompteBundle\Entity\Evolution:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\EvolutionRepository
+  table: evolution
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    solde:
+      type: float
+    created_at:
+      type: datetime
+  manyToOne:
+    compte:
+      targetEntity: Compte
+      inversedBy: evolutions
+      joinColumn:
+        name: compte_id
+        referencedColumnName: id
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue ]

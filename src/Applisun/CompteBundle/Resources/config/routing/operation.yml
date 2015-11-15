@@ -1,0 +1,33 @@
+operation:
+    path:     /
+    defaults: { _controller: "ApplisunCompteBundle:Operation:index" }
+
+operation_show:
+    path:     /{id}/show
+    defaults: { _controller: "ApplisunCompteBundle:Operation:show" }
+
+operation_new:
+    path:     /new
+    defaults: { _controller: "ApplisunCompteBundle:Operation:new" }
+
+operation_create:
+    path:     /create
+    defaults: { _controller: "ApplisunCompteBundle:Operation:create" }
+    requirements: { _method: post }
+
+operation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ApplisunCompteBundle:Operation:edit" }
+
+operation_update:
+    path:     /{id}/update
+    defaults: { _controller: "ApplisunCompteBundle:Operation:update" }
+    requirements: { _method: post }
+
+operation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ApplisunCompteBundle:Operation:delete" }
+    
+operation_search:
+    pattern: /search/{page}
+    defaults: { _controller: "ApplisunCompteBundle:Operation:search" }

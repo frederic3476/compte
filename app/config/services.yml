@@ -1,0 +1,37 @@
+parameters:
+    applisun_compte.compte_manager.class: Applisun\CompteBundle\Service\CompteManager
+    applisun_compte.subscriber.operation.class: Applisun\CompteBundle\EventDispatcher\Subscriber\OperationSubscriber
+    applisun_compte.listener.compte.class: Applisun\CompteBundle\EventDispatcher\Listener\CompteListener
+    compte.class: Applisun\CompteBundle\Entity\Compte
+    operation.formtype.class: Applisun\CompteBundle\Form\OperationFormType
+    virementInterne: Virement-interne
+    virementExterne: Virement-externe
+    maxperpage: 10
+
+services:
+    #Form
+    applisun.form.operation:
+        class: %operation.formtype.class%
+        arguments: [%compte.class%, "@security.context"]
+        tags:
+                - { name: form.type, alias: applisun_operation_form }
+                
+    # Manager
+    applisun_compte.compte_manager:
+        class:     %applisun_compte.compte_manager.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.context"
+            - "@event_dispatcher"
+            
+    # Listener & Subscriber       
+    my.listener:
+            class: %applisun_compte.listener.compte.class%
+            tags:
+                - { name: doctrine.event_listener, event: postPersist, method: postPersist }
+                - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+                - { name: doctrine.event_listener, event: postRemove, method: postRemove }
+    applisun_compte.subscriber.vote:
+        class: %applisun_compte.subscriber.operation.class%
+        tags:
+            - { name: kernel.event_subscriber }

@@ -1,0 +1,36 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+{% form_theme edit_form 'ApplisunCompteBundle:Form:fields.html.twig' %}
+{% block body -%}
+    <h1>Banque edit</h1>
+
+    {{ form(edit_form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('banque') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <h1>Modifier la banque : {{ entity.name }}</h1>
+        <form class="col-lg-6" action="{{ path('banque_update', { 'id': entity.id}) }}"  method="post" enctype="multipart/form-data" novalidate>
+            <div class="form-group">
+                {{ form_label(edit_form.name) }}
+                {{ form_widget(edit_form.name) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(edit_form.url_site) }}
+                {{ form_widget(edit_form.url_site) }}
+            </div>
+            <div class="form-group">
+                {{ form_rest(edit_form) }}
+            </div>    
+        </form> 
+        <img class="img-responsive img-small" src="{{ asset('uploads/banques/'~entity.logo) }}"/>
+    </div>    
+{% endblock %}

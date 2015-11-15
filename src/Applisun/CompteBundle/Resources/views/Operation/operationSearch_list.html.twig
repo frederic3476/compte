@@ -1,0 +1,27 @@
+<table class="table table-bordered table-striped table-condensed">
+                {% if operations|length > 0 %} 
+                <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Compte</th>
+                  <th>Libellé</th>
+                  <th>Type</th>
+                  <th>Débit/Crédit</th>
+                </tr>
+              </thead>
+                <tbody>
+                    {% for operation in operations %}
+                        <tr>
+                            <td>{{ operation.createdat|date('d-m-Y') }} </td>
+                            <td>{{ operation.compte.banque.name }} / {{ operation.compte.numero }}</td>
+                            <td> {{ operation.libelle }}</td>
+                            <td> {{ operation.typeoperation.type }}</td>
+                            <td><span class="glyphicon glyphicon-chevron-{% if operation.typeoperation.isdebit%}down{% else %}up{% endif %} badge alert-{% if operation.typeoperation.isdebit%}danger{% else %}success fright{% endif %}"> {{ operation.montant }}&euro;</span></td>                            
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    Aucune opération 
+                {% endif %}
+                </tbody>
+</table>
+{% include 'ApplisunCompteBundle:Default:pagination.html.twig' %}

@@ -1,0 +1,11 @@
+{#{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+
+{% block content %}#}
+    {% if operations|length > 0 %} 
+        <script type="text/javascript">
+                {{ chart(piechart) }}
+        </script>
+
+        <div class="col-xs-12 graphic-pie" id="{{ eltId }}"></div>
+    {% endif %}
+{#{% endblock %}#}

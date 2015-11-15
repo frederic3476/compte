@@ -1,0 +1,31 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+{% form_theme edit_form 'ApplisunCompteBundle:Form:fields.html.twig' %}
+{% block body -%}
+    <h1>Category edit</h1>
+
+    {{ form(edit_form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('category') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <h1>Modifier la category : {{ entity.nom }}</h1>
+        <form class="col-lg-6" action="{{ path('category_update', { 'id': entity.id}) }}"  method="post" enctype="multipart/form-data" novalidate>
+            <div class="form-group">
+                {{ form_label(edit_form.nom) }}
+                {{ form_widget(edit_form.nom) }}
+            </div>
+            <div class="form-group">
+                {{ form_rest(edit_form) }}
+            </div>    
+        </form> 
+    </div>    
+{% endblock %}

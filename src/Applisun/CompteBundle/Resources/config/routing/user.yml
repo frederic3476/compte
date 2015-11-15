@@ -1,0 +1,16 @@
+users:
+    path: /backend/users
+    defaults: { _controller: ApplisunCompteBundle:User:index }
+
+user_register:
+    path: /register
+    defaults: { _controller: ApplisunCompteBundle:User:create }
+
+user_show:
+    path: /{id}/show
+    defaults: { _controller: ApplisunCompteBundle:User:show }
+    
+user_edit:
+    path: /{id}/edit
+    defaults: { _controller: ApplisunCompteBundle:User:edit }
+    

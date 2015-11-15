@@ -1,0 +1,151 @@
+body { padding-top: 70px; }
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 2s 5s, opacity 5s linear;
+}
+
+//TOOLTIP
+a[data-tooltip] {
+  position: relative;
+}
+a[data-tooltip]::before,
+a[data-tooltip]::after {
+  position: absolute;
+  display: none;
+  opacity: 0.85;
+}
+a[data-tooltip]::before {
+  /*
+   * using data-tooltip instead of title so we 
+   * don't have the real tooltip overlapping
+   */
+  content: attr(data-tooltip);
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+  padding: 5px;
+  border-radius: 5px;
+  /* we don't want the text to wrap */
+  white-space: nowrap;
+  text-decoration: none;
+}
+a[data-tooltip]::after {
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  content: '';
+}
+
+a[data-tooltip]:hover::before,
+a[data-tooltip]:hover::after {
+  display: block;
+}
+
+/** positioning **/
+/* bottom tooltip */
+a[data-tooltip][data-placement="bottom"]::before {
+  top: 100%;
+  left: 0;
+  margin-top: 10px;
+}
+a[data-tooltip][data-placement="bottom"]::after {
+  border-bottom-color: #000;
+  border-top: none;
+  top: 100%;
+  left: 10px;
+  margin-top: 4px;
+}
+
+footer{
+    background: #1f1f1f;
+    margin-top: 20px;
+    color: #9d9d9d;
+    padding: 10px 10px 10px 10px;
+}
+
+table .table-condensed td{
+    vertical-align: middle;
+}
+
+.text-center{
+    text-align: center;
+}
+
+@-webkit-keyframes fadeOut {
+  0% {opacity: 0.5;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+@keyframes fadeOut {
+  0% {opacity: 0.5;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.alertFade {
+  -webkit-animation-name: fadeOut;
+    -moz-animation-name: fadeOut;
+    -o-animation-name: fadeOut;
+    animation-name: fadeOut;
+    animation-duration:3s; 
+    animation-iteration-count:1;
+    animation-timing-function:easyout;
+    -webkit-animation-duration:5s; 
+    -webkit-animation-iteration-count:1;
+    -webkit-animation-timing-function:easyout;
+    -moz-animation-duration:5s; 
+    -moz-animation-iteration-count:1;
+    -moz-animation-timing-function:easyout;
+    -ms-animation-duration:5s; 
+    -ms-animation-iteration-count:1;
+    -ms-animation-timing-function:easyout;
+    -o-animation-duration:5s; 
+    -o-animation-iteration-count:1;
+    -o-animation-timing-function:easyout;  
+    opacity: 0;
+  position: absolute;
+    top: 10%;
+    left: 25%;        
+    width: 800px;
+    text-align:center;
+}
+
+//GRAPHICS
+.demo-container {
+	box-sizing: border-box;
+	width: 850px;
+	height: 450px;
+	padding: 20px 15px 15px 15px;
+	margin: 15px auto 30px auto;
+	border: 1px solid #ddd;
+	background: #fff;
+	background: linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
+	background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
+	box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+#domIdFollowers {
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	line-height: 1.2em;
+}
+
+.legend table {
+	border-spacing: 5px;
+}
+
+.img-small {
+    max-width: 40%;
+}
+

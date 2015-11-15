@@ -1,0 +1,28 @@
+{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+{% block content %}
+      <ul class="breadcrumb">
+            <li><a href="{{ path('homepage') }}">Accueil</a></li>
+            <li class="active">Mes comptes</li>
+      </ul>
+    <div class="row">  
+        <div class="col-sm-8">
+            <h2>Mes comptes</h2>
+        </div>
+        <div class="col-sm-4">
+            <a class="btn btn-primary" href="{{ path('compte_new') }}">
+                Ajouter un nouveau compte
+            </a>
+        </div>
+    </div>            
+                
+    {{ include('ApplisunCompteBundle::success_message.html.twig') }}            
+    {% if comptesCourant and comptesCourant|length >0 %}
+        <h3>Compte courant</h3>    
+        {{ include('ApplisunCompteBundle:Compte:compte_list.html.twig', { 'entities': comptesCourant }) }} 
+    {% endif %}
+    {% if comptesEpargne and comptesEpargne|length >0 %}
+        <h3>Compte épargne</h3> 
+        {{ include('ApplisunCompteBundle:Compte:compte_list.html.twig', { 'entities': comptesEpargne }) }}
+    {% endif %}    
+    </div>    
+    {% endblock %}

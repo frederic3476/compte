@@ -1,0 +1,19 @@
+Applisun\CompteBundle\Entity\Pret:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\PretRepository
+  table: pret
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    type:  
+      type: string
+      length: 255
+    taux:
+      type: float
+    mensualite:
+      type: float 
+    date_fin:
+      type: datetime
+      

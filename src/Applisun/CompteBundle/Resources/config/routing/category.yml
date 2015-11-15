@@ -1,0 +1,29 @@
+category:
+    path:     /
+    defaults: { _controller: "ApplisunCompteBundle:Category:index" }
+
+category_show:
+    path:     /{id}/show
+    defaults: { _controller: "ApplisunCompteBundle:Category:show" }
+
+category_new:
+    path:     /new
+    defaults: { _controller: "ApplisunCompteBundle:Category:new" }
+
+category_create:
+    path:     /create
+    defaults: { _controller: "ApplisunCompteBundle:Category:create" }
+    requirements: { _method: post }
+
+category_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ApplisunCompteBundle:Category:edit" }
+
+category_update:
+    path:     /{id}/update
+    defaults: { _controller: "ApplisunCompteBundle:Category:update" }
+    requirements: { _method: post|put }
+
+category_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ApplisunCompteBundle:Category:delete" }

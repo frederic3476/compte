@@ -1,0 +1,30 @@
+Applisun\CompteBundle\Entity\Virement:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\VirementRepository
+  table: virement
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    montant:
+      type: float
+    type:  
+      type: string
+      length: 255
+    date:
+      type: datetime
+  ManyToOne:
+      emmeteur:
+          targetEntity: Compte
+          inversedBy: virements_emetteur
+          joinColumn:
+            name: compte_id_emetteur
+            referencedColumnName: id 
+      destinataire:
+          targetEntity: Compte
+          inversedBy: virements_destinataire
+          joinColumn:
+            name: compte_id_destinataire
+            referencedColumnName: id 
+      

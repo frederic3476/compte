@@ -1,0 +1,33 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+{% block content %}
+    <h1>Banques</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Logo</th>
+                <th>Name</th>
+                <th>Url_site</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('banque_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td style="width:10%;"><img class="img-responsive img-small" src="{{ asset('uploads/banques/'~entity.logo) }}"/></td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.urlsite }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('banque_edit', { 'id': entity.id }) }}">Editer</a>
+                    <a class="btn btn-primary" href="{{ path('banque_delete', { 'id': entity.id }) }}" onclick="if(!confirm('Etes-voius sûr ?')) { return false; }">Supprimer</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+            <a class="btn btn-primary" href="{{ path('banque_new') }}">
+                Ajouter une nouvelle banque
+            </a>
+    {% endblock %}

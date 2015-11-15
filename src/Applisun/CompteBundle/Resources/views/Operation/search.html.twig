@@ -1,0 +1,11 @@
+{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+ 
+{% block content %}
+    <ul class="breadcrumb">
+        <li><a href="{{ path('homepage') }}">Accueil</a></li>
+        <li><a href="{{ path('compte') }}">Mes comptes</a></li>
+        <li class="active">Recherche opération</li>
+    </ul>
+    <h2>{{ pagination.nbr_operation }} opération(s) trouvé(s)</h2>    
+    {% include 'ApplisunCompteBundle:Operation:operationSearch_list.html.twig' with {'operations': operations} %}    
+{% endblock %}

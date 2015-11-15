@@ -1,0 +1,17 @@
+{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+{% block content %}
+        {% if is_granted('ROLE_USER') %}
+        <h2>Bienvenue {{ nom }}</h2> 
+        <h3>Vous avez {{ comptes|length }} comptes enregistrés </h3>
+        <a class="btn btn-primary btn-sm" href="{{ path('compte') }}">Voir mes comptes</a>
+        <a class="btn btn-primary btn-sm" href="{{ path('compte_new') }}">
+                    Ajouter un nouveau compte
+        </a>
+        {% else %}
+            <h2>Bienvenue sur le service web Compte Service Plus</h2> 
+            <p> Ce service vous permet de gérer vos comptes personnels que ce soit l'épargne ou les comptes courants. </p>
+            <p>Compte Service Plus vous permet de visualiser l'évolution de votre solde ainsi que la répartition de vos dépenses à l'aide de graphiques complets et simples.<p>
+            <p><a href="{{ path('login') }}">Connectez-vous</a> ou <a href="{{ path('user_register') }}">créez un compte</a></p>     
+        {% endif %}    
+
+{% endblock %}  

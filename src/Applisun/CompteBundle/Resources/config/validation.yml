@@ -1,0 +1,69 @@
+Applisun\CompteBundle\Entity\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username        
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+    properties:
+        username:
+            - NotBlank: ~
+        password:
+            - NotBlank: ~
+        email:
+            - NotBlank: ~
+            - Email: ~
+            
+Applisun\CompteBundle\Entity\Banque:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    properties:
+        name:
+            - NotBlank: ~  
+        url_site:
+            - Url: ~
+        file:
+            - Image: 
+                minWidth: 90
+                maxWidth: 90
+                minHeight: 90
+                maxHeight: 90
+                maxWidthMessage: L'image doit faire 90x90 exactement
+                minWidthMessage: L'image doit faire 90x90 exactement
+                maxHeightMessage: L'image doit faire 90x90 exactement
+                minHeightMessage: L'image doit faire 90x90 exactement
+            
+Applisun\CompteBundle\Entity\Compte:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: numero
+    properties:
+        nom:
+            - NotBlank: ~ 
+        titulaire:
+            - NotBlank: ~ 
+        numero:
+            - NotBlank: ~  
+        solde:
+            - NotBlank: ~ 
+            - Type:
+                type: double
+                message: La valeur {{ value }} n'est pas un type {{ type }} valide.
+        type:
+            - NotBlank: ~
+            - Choice: {callback: getTypeValues}
+        banque:
+            - NotBlank: ~
+            
+Applisun\CompteBundle\Entity\Operation:
+    properties:
+        libelle:
+            - NotBlank: ~ 
+        montant:
+            - NotBlank: ~ 
+            - Type:
+                type: double
+                message: La valeur {{ value }} n'est pas un type {{ type }} valide.
+        typeOperation:
+            - NotBlank: ~
+                
+Applisun\CompteBundle\Entity\TypeOperation:
+    properties:
+        type:
+            - NotBlank: ~ 

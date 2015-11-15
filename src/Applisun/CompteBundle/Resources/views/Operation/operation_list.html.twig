@@ -1,0 +1,45 @@
+{% if operations|length > 0 %} 
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Libellé</th>
+                <th class="hidden-xxs">Type</th>
+                <th>Débit/Crédit</th>
+                <th class="hidden-xxs"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for operation in operations %}
+                <tr>
+                    <td>{{ operation.createdat|date('d-m-Y') }} </td>
+                    <td> {{ operation.libelle }}</td>
+                    <td class="hidden-xxs"> {{ operation.typeoperation.type }}</td>
+                    <td><span class="glyphicon glyphicon-chevron-{% if operation.typeoperation.isdebit%}down{% else %}up{% endif %} badge alert-{% if operation.typeoperation.isdebit%}danger{% else %}success fright{% endif %}"> {{ operation.montant }}&euro;</span></td>
+                    <td class="hidden-xxs">
+                        <div class="btn-toolbar">
+                            <div class="btn-group">
+                                <a data-toggle="modal" data-target="#myModal" data-tooltip="Editer" data-placement="bottom" class="btn btn-sm btn-warning hidden-sm hidden-xs" href="{{ path('operation_edit', { 'id': operation.id }) }}"><span class="glyphicon glyphicon-pencil"></span>&nbsp;</a>
+                                <a data-tooltip="Supprimer" data-placement="bottom" class="btn btn-sm btn-danger" href="{{ path('operation_delete', { 'id': operation.id }) }}" onclick="if (!confirm('Etes-vous sûr ?')) {
+                                                    return false;
+                                                }"><span class="glyphicon glyphicon-remove"></span>&nbsp;</a>                            
+                            </div>
+                        </div>   
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+    {%if info.page!='all' %}        
+        <a href="{{ path('compte_show', {'id': info.id, 'year': info.year, 'page': 'all'}) }}" class="more-operations">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+            Afficher toutes les opérations
+        </a>
+    {% endif %}
+{% else %}
+    Aucune opération 
+{% endif %}
+
+

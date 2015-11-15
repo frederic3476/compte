@@ -1,0 +1,10 @@
+$.plot($("{{domSelector}}"), [{
+    data: {{ data|json_encode|raw }},
+    {% for index, data in options.data %}
+    {{ index }} : {{ data | json_encode | raw }},
+    {% endfor %}
+    }], 
+    {{ options.options| json_encode | raw }}
+);
+
+

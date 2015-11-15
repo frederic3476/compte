@@ -1,0 +1,36 @@
+compte:
+    path:     /
+    defaults: { _controller: "ApplisunCompteBundle:Compte:index" }
+
+compte_type:
+    path:     /type/{type}
+    defaults: { _controller: "ApplisunCompteBundle:Compte:type" }
+
+compte_show:
+    path:     /{id}/{year}/{page}/show
+    defaults: { _controller: "ApplisunCompteBundle:Compte:show", page: 1 }
+
+compte_new:
+    path:     /new
+    defaults: { _controller: "ApplisunCompteBundle:Compte:new" }
+
+compte_create:
+    path:     /create
+    defaults: { _controller: "ApplisunCompteBundle:Compte:create" }
+    requirements: { _method: post }
+
+compte_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ApplisunCompteBundle:Compte:edit" }
+
+compte_update:
+    path:     /{id}/update
+    defaults: { _controller: "ApplisunCompteBundle:Compte:update" }
+    requirements: { _method: post }
+
+compte_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ApplisunCompteBundle:Compte:delete" }
+compte_graphic:
+    path:     /{id}/{year}/graphic
+    defaults: { _controller: "ApplisunCompteBundle:Graphic:graphicCompte" }    

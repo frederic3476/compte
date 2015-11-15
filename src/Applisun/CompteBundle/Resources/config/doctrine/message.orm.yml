@@ -1,0 +1,19 @@
+Applisun\CompteBundle\Entity\Message:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\MessageRepository
+  table: message
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    texte:
+      type: text
+  manyToOne:
+      category:
+          targetEntity: Category
+          inversedBy: messages
+          joinColumn:
+            name: category_id
+            referencedColumnName: id      
+  

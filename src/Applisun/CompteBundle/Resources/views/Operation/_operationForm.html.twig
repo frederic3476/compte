@@ -1,0 +1,46 @@
+<form class="form-horizontal" action="{{ path('compte_show', { 'id': entity.id, 'year': year}) }}"  method="post" novalidate>
+    <div class="form-group">
+        {{ form_widget(form.montant, {'attr':{'placeholder':'Montant:'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_widget(form.libelle, {'attr':{'placeholder':'Libellé:'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_widget(form.debitType) }}
+    </div>
+    <div class="form-group">
+        {{ form_widget(form.creditType) }}
+    </div>
+    <div id="compte_form" class="form-group hidden">
+        {{ form_widget(form.compte, {'attr':{'placeholder':'Compte cible:'}}) }}
+    </div> 
+
+    {{ form_widget(form._token) }}
+    <div class="form-group">
+        {{ form_widget(form.Enregistrer) }}
+    </div>
+    {{ form_rest(form) }}
+</form>
+<script type="text/javascript">
+    $('#applisun_operation_form_debitType').change(function (event) {
+        event.preventDefault();
+        $('#applisun_operation_form_creditType').val(null);
+    });
+    $('#applisun_operation_form_creditType').change(function (event) {
+        event.preventDefault();
+        $('#applisun_operation_form_debitType').val(null);
+        $("#compte_form").addClass('hidden');
+    });
+
+    $("#applisun_operation_form_debitType").change(function () {
+        textSelected = $("#applisun_operation_form_debitType option:selected").text();
+        if (textSelected == "{{ virementInterne }}")
+        {
+            $("#compte_form").removeClass('hidden');
+        }
+        else if (!$("#compte_form").hasClass('hidden'))
+        {
+            $("#compte_form").addClass('hidden');
+        }
+    });    
+</script>

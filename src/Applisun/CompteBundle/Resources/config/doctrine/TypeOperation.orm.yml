@@ -1,0 +1,19 @@
+Applisun\CompteBundle\Entity\TypeOperation:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\TypeOperationRepository
+  table: typeOperation
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    type:  
+      type: string
+      length: 255
+    is_debit:
+      type: boolean
+  oneToMany:
+    operations:
+      targetEntity: Operation
+      mappedBy: typeOperation
+    

@@ -1,0 +1,30 @@
+typeoperation:
+    path:     /
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:index" }
+
+typeoperation_show:
+    path:     /{id}/show
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:show" }
+
+typeoperation_new:
+    path:     /new
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:new" }
+
+typeoperation_create:
+    path:     /create
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:create" }
+    requirements: { _method: post }
+
+typeoperation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:edit" }
+
+typeoperation_update:
+    path:     /{id}/update
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:update" }
+    requirements: { _method: post|put }
+
+typeoperation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ApplisunCompteBundle:TypeOperation:delete" }
+    requirements: { _method: post|get }

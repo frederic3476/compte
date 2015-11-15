@@ -1,0 +1,26 @@
+Applisun\CompteBundle\Entity\User:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\UserRepository
+  table: user
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    username:
+      type: string
+      length: 255
+    password:
+      type: string
+      length: 255
+    salt:
+      type: string
+      length: 255 
+    email:
+      type: string
+      length: 255
+  oneToMany:
+    comptes:
+      targetEntity: Compte
+      mappedBy: user
+

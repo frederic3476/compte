@@ -1,0 +1,37 @@
+{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+{% block stylesheets %}
+  {{ parent() }}
+{% endblock %}
+
+{% block content %}
+{{ include('ApplisunCompteBundle::success_message.html.twig') }}
+<div class="row">  
+<form class="col-lg-12" action="{{ path('login_check') }}" method="post">
+    <div class="form-group">
+        <div class="input-group"> 
+          <span class="input-group-addon">Login</span>
+          <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" />
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <div class="input-group"> 
+          <span class="input-group-addon">Mot de passe</span>
+          <input class="form-control" type="password" id="password" name="_password" />
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <label for="remember_me">Se souvenir de moi</label>
+        <input type="checkbox" id="remember_me" name="_remember_me" checked />
+    </div>    
+    
+    {% if error %}
+    <div class="alert alert-block alert-danger">{{ error.message|trans({'Bad credentials': 'Login ou mot de passe incorrect'}) }}</div>
+    {% endif %}
+    <div class="col-lg-12 text-center">
+        <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok-sign"></span> S'identifier</button>
+        <a class="btn btn-primary" href="{{ path('user_register') }}"><span class="glyphicon glyphicon-user"></span> S'inscrire</a>
+    </div>
+</form>
+</div>    
+{% endblock %}

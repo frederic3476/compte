@@ -1,0 +1,36 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+
+{% block body -%}
+    <h1>TypeOperation</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ entity.type }}</td>
+            </tr>
+            <tr>
+                <th>Is_debit</th>
+                <td>{{ entity.isdebit }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('typeoperation') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('typeoperation_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

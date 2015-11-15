@@ -1,0 +1,36 @@
+Applisun\CompteBundle\Entity\Banque:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\BanqueRepository
+  table: banque
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    name:
+      type: string
+      length: 255
+      unique: true
+    logo:
+      type: string
+      length: 255
+      nullable: true
+    url_site:
+      type: string
+      length: 255
+      nullable: true
+    created_at:
+      type: datetime
+    updated_at:
+      type: datetime
+      nullable: true  
+  oneToMany:
+    comptes:
+      targetEntity: Compte
+      mappedBy: banque
+  lifecycleCallbacks:
+    prePersist: [ preUpload, setCreatedAtValue ]
+    preUpdate: [ preUpload, setUpdatedAtValue ]
+    postPersist: [ upload ]
+    postUpdate: [ upload ]
+    postRemove: [ removeUpload ]

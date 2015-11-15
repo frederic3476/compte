@@ -1,0 +1,36 @@
+applisun_compte_user:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/user.yml"
+
+applisun_compte_typeoperation:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/typeoperation.yml"
+    prefix:   /backend/typeoperation
+
+applisun_compte_operation:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/operation.yml"
+    prefix:   /operation
+
+applisun_compte_compte:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/compte.yml"
+    prefix:   /compte
+
+applisun_compte_banque:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/banque.yml"
+    prefix:   /backend/banque
+
+applisun_compte_category:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/category.yml"
+    prefix:   /backend/category
+ 
+applisun_compte_message:
+    resource: "@ApplisunCompteBundle/Resources/config/routing/message.yml"
+    prefix:   /backend/message    
+
+homepage:
+    path:     /
+    defaults: { _controller: ApplisunCompteBundle:Default:index }
+    
+backend:
+    path:     /backend
+    defaults: { _controller: ApplisunCompteBundle:Backend:index }
+
+

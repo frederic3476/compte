@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('bundles/applisuncompte/css/example.css') }}" type="text/css" media="all" />
+    {% endblock %}
+    {% block javascripts %}
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/bootstrap.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/highcharts/js/highcharts.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/highcharts/js/modules/exporting.js') }}"></script>
+    {% endblock %}
+    <link rel="shortcut icon" href="" />
+  </head>
+  <body>
+          <div class="row">
+              <div class="col-xs-12" >
+                {% block content %}
+                {% endblock %}
+              </div>
+          </div>      
+  </body>
+</html>
+    

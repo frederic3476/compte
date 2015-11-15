@@ -1,0 +1,10 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+{% form_theme form 'ApplisunCompteBundle:Form:fields.html.twig' %}
+{% block content %}
+    <h1>Créer un nouveau type d'opération</h1>
+
+    {{ form(form) }}
+    <a class="btn btn-primary" href="{{ path('typeoperation') }}">
+        Retourner à la liste
+    </a>
+{% endblock %}

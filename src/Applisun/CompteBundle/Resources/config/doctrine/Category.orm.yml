@@ -1,0 +1,17 @@
+Applisun\CompteBundle\Entity\Category:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\CategoryRepository
+  table: category
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    nom:
+      type: string
+      length: 255
+      unique: true
+  oneToMany:
+    messages:
+      targetEntity: Message
+      mappedBy: category  

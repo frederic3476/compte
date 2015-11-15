@@ -1,0 +1,28 @@
+{% extends 'ApplisunCompteBundle::backend_layout.html.twig' %}
+{% block content %}
+    <h1>Liste des types d'opération</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Is_debit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.type }}</td>
+                <td>{{ entity.isdebit }}</td>
+                <td>
+                   <a class="btn btn-primary" href="{{ path('typeoperation_edit', { 'id': entity.id }) }}">edit</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-primary" href="{{ path('typeoperation_new') }}">
+          Créer un nouveau type d'opération
+    </a>
+    {% endblock %}

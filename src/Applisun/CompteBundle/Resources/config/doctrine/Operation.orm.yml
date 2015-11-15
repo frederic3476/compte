@@ -1,0 +1,38 @@
+Applisun\CompteBundle\Entity\Operation:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\OperationRepository
+  table: operation
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    montant:
+      type: float
+    libelle:
+      type: string
+      length: 255
+    created_at:
+      type: datetime
+    updated_at:
+      type: datetime
+      nullable: true
+  manyToOne:
+    compte:
+      targetEntity: Compte
+      inversedBy: operations
+      joinColumn:
+        name: compte_id
+        referencedColumnName: id
+    typeOperation:
+        targetEntity: TypeOperation
+        inversedBy: operations
+        joinColumn:
+          name: typeOperation_id
+          referencedColumnName: id
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue]
+    postPersist: [ updateLuceneIndex ]
+    postUpdate: [ updateLuceneIndex ]
+    preUpdate: [ setUpdatedAtValue ]
+    postRemove: [ deleteLuceneIndex ]

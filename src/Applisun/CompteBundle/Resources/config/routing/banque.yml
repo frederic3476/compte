@@ -1,0 +1,29 @@
+banque:
+    path:     /
+    defaults: { _controller: "ApplisunCompteBundle:Banque:index" }
+
+banque_show:
+    path:     /{id}/show
+    defaults: { _controller: "ApplisunCompteBundle:Banque:show" }
+
+banque_new:
+    path:     /new
+    defaults: { _controller: "ApplisunCompteBundle:Banque:new" }
+
+banque_create:
+    path:     /create
+    defaults: { _controller: "ApplisunCompteBundle:Banque:create" }
+    requirements: { _method: post }
+
+banque_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ApplisunCompteBundle:Banque:edit" }
+
+banque_update:
+    path:     /{id}/update
+    defaults: { _controller: "ApplisunCompteBundle:Banque:update" }
+    requirements: { _method: post|put }
+
+banque_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ApplisunCompteBundle:Banque:delete" }

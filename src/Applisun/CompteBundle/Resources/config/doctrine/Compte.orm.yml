@@ -1,0 +1,56 @@
+Applisun\CompteBundle\Entity\Compte:
+  type: entity
+  repositoryClass: Applisun\CompteBundle\Repository\CompteRepository
+  table: compte
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    nom:
+      type: string
+      length: 255
+    titulaire:
+      type: string
+      length: 255  
+    numero:
+      type: string
+      length: 255
+    solde:
+      type: float
+      length: 10
+    type:  
+      type: string
+      length: 255
+      nullable: true
+    created_at:
+      type: datetime
+    updated_at:
+      type: datetime
+      nullable: true
+  manyToOne:
+      user:
+        targetEntity: User
+        inversedBy: comptes
+        joinColumn:
+          name: user_id
+          referencedColumnName: id 
+      banque:
+          targetEntity: Banque
+          inversedBy: comptes
+          joinColumn:
+            name: banque_id
+            referencedColumnName: id  
+  oneToMany:
+        operations:
+          targetEntity: Operation
+          mappedBy: compte
+          cascade: ["remove", "persist"]
+        evolutions:
+          targetEntity: Evolution
+          mappedBy: compte
+          cascade: ["remove", "persist"]
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue]
+    preUpdate: [ setUpdatedAtValue ]
+

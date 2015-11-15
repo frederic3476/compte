@@ -1,0 +1,20 @@
+{% extends 'ApplisunCompteBundle::layout.html.twig' %}
+{% block content %}
+    <h1>Votre espace personnel</h1>
+
+    <table class="table table-bordered table-striped table-condensed">
+        <tbody>
+            <tr>
+                <td>Login</td>
+                <td>{{ entity.username }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ entity.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+        <a data-toggle="modal" data-target="#myModal" class="btn btn-primary" href="{{ path('user_edit', { 'id': entity.id }) }}">
+            Modifier
+        </a>
+{% endblock %}
