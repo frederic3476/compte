@@ -32,5 +32,9 @@ homepage:
 backend:
     path:     /backend
     defaults: { _controller: ApplisunCompteBundle:Backend:index }
+    
+test:
+    path:     /test
+    defaults: { _controller: ApplisunCompteBundle:Default:test }
 
 

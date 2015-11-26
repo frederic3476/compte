@@ -3,6 +3,7 @@
 namespace Applisun\CompteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Evolution
@@ -26,6 +27,7 @@ class Evolution
 
     /**
      * @var \Applisun\CompteBundle\Entity\Compte
+     * @Serializer\Exclude()
      */
     private $compte;
 

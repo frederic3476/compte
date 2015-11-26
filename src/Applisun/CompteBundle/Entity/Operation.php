@@ -3,6 +3,7 @@
 namespace Applisun\CompteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Operation
@@ -36,6 +37,7 @@ class Operation
 
     /**
      * @var \Applisun\CompteBundle\Entity\compte
+     * @Serializer\Exclude()
      */
     private $compte;
 

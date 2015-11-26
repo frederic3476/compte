@@ -1,0 +1,37 @@
+<a href="#/home">Retour comptes</a>
+Compte [[ compteId ]]
+
+<div class="col-xs-12">
+    <input ng-model="chartConfig.title.text">
+    <select ng-model="chartConfig.options.chart.type">
+        <option value='line'>Line</option>
+        <option value='bar'>Bar</option>
+        <option value='area'>Area</option>
+        <option value='column'>Column</option>
+        <option value='spline'>Spline</option>
+    </select>
+    <select ng-model="interval" ng-change="updateInterval()">
+        <option value='day'>Day</option>
+        <option value='month'>Month</option>
+    </select>
+    <div class="row">
+        <div class="col-md-6">
+            <p class="input-group">
+              <input type="date" class="form-control" uib-datepicker-popup="[[ format ]]" min-mode='interval' ng-model="debut" is-open="debutStatus.opened" min-date="debutMinDate" max-date="maxDate" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDebut()"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <p class="input-group">
+              <input type="date" class="form-control" uib-datepicker-popup="[[ format ]]" min-mode='interval' ng-model="fin" is-open="finStatus.opened" min-date="finMinDate" max-date="maxDate" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openFin()"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+        </div>
+    </div>
+    <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+</div>

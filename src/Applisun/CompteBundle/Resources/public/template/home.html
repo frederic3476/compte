@@ -1,0 +1,33 @@
+<select name="order" ng-model="ordre">
+    <option value="createdat">Date</option>
+    <option value="montant">Montant</option>
+    <option value="libelle">Libellé</option>
+</select>  
+<select name="trier" ng-model="tri">
+    <option value="all" selected="selected">Tout</option>
+    <option value=0>Debit</option>
+    <option value=1>Credit</option>
+</select> 
+<div class="row">
+    <div class="col-xs-12">
+            <uib-tabset>
+            <uib-tab ng-repeat="info in data">
+            <uib-tab-heading>[[ info.nom ]] - [[ info.solde ]] &euro;</uib-tab-heading>
+            <h4>Ordonné par [[ ordre ]]</h4> 
+            <a href="#/graphic/[[ info.id ]]">Voir le graphique</a>
+            <div class="row">
+                <div class="col-xs-6" >
+                    <h4>Liste des opérations</h4>
+                <ul>
+                    <li ng-repeat="ope in info.operations | filter:{type_operation:tri}:filterOpe | orderBy:'-'+ordre:true">[[ ope.created_at | date:"dd/MM/yyyy 'à' h:mma" ]] - [[ ope.type_operation.type ]] - [[ ope.montant ]] - [[ ope.libelle ]]</li></ul>
+                </div>
+                <div class="col-sx-6">
+                    <h4>Répartition des opérations</h4>
+                    <pierepart num="[[ $index ]]" compteId="[[ info.id ]]"></pierepart>
+                </div>
+            </div>    
+            </uib-tab>
+            </uib-tabset>
+    </div>
+    
+</div>

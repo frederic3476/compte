@@ -20,6 +20,6 @@ class MessageRepository extends \Doctrine\ORM\EntityRepository
                 ->orderBy('m.texte', 'ASC')                 
                 ->setParameter('catId', $catId);
           
-        $messages = $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 }

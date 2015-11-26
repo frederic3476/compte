@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+  <head>
+    <title>
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('bundles/applisuncompte/bootstrap/css/bootstrap.css') }}" type="text/css" media="all" />
+      <link rel="stylesheet" href="{{ asset('bundles/applisuncompte/css/test.css') }}" type="text/css" media="all" />
+    {% endblock %}
+    {% block javascripts %}
+        <script>
+            window.userId = {{ app.security.getToken().getUser().getId() }};
+        </script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/bootstrap.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/highcharts/js/highcharts.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/highcharts/js/modules/exporting.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/ui-bootstrap-tpls-0.14.3.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/highcharts-ng.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/MyAngular.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/MyService.js') }}"></script>
+    {% endblock %}
+    <link rel="shortcut icon" href="" />
+  </head>
+  <body ng-controller="MyController">
+          <div class="row no-padding no-margin">
+              <h1>Comptes de {{ app.security.getToken().getUser().getUsername() }} </h1>
+              <input type="hidden" ng-model="userId"/>
+              <div class="view-animate" ng-view></div>
+          </div>      
+  </body>
+</html>

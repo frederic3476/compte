@@ -39,4 +39,9 @@ class DefaultController extends Controller
             'error'         => $error,
         ));
     }
+    
+     public function testAction()
+    {
+        return $this->render('ApplisunCompteBundle:Default:test.html.twig'); 
+    }
 }

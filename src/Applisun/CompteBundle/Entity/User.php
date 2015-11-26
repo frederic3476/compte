@@ -4,6 +4,7 @@ namespace Applisun\CompteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity()
@@ -38,6 +39,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @var \Doctrine\Common\Collections\Collection
+     * @Serializer\Exclude()
      */
     protected $comptes;
 

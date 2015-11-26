@@ -3,6 +3,7 @@
 namespace Applisun\CompteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Banque
@@ -41,6 +42,7 @@ class Banque
 
     /**
      * @var \Doctrine\Common\Collections\Collection
+     * @Serializer\Exclude()
      */
     private $comptes;
     

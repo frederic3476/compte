@@ -3,6 +3,7 @@
 namespace Applisun\CompteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Compte
@@ -51,6 +52,7 @@ class Compte
 
     /**
      * @var \Doctrine\Common\Collections\Collection
+     * @Serializer\Exclude()
      */
     private $operations;
 
@@ -76,6 +78,7 @@ class Compte
     
     /**
      * @var \Doctrine\Common\Collections\Collection
+     * @Serializer\Exclude()
      */
     private $evolutions;
 

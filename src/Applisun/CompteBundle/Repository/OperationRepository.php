@@ -20,16 +20,24 @@ class OperationRepository extends EntityRepository
         $maxperpage = $container->getParameter('maxperpage');
         
         $qb = $this->createQueryBuilder('o')
-                ->where('MONTH(o.created_at) = :month')
-                ->andWhere('YEAR(o.created_at) = :year')
+                ->where('YEAR(o.created_at) = :year')
                 ->andWhere('o.compte = :compteId')
-                ->orderBy('o.created_at', 'DESC');
+                ->setParameters(array('year' => $year, 'compteId' => $compteId));            
+        
+        if ($month !='all')
+        {
+            $qb->andWhere('MONTH(o.created_at) = :month');
+            $qb->setParameter('month', $month);
+        }
+        
+        $qb->orderBy('o.created_at', 'DESC');
+        
         if ($page != 'all')
         {    $qb ->setFirstResult(($page-1) * $maxperpage)
                 ->setMaxResults($maxperpage);
         }
         
-        $qb->setParameters(array('month' => $month, 'year' => $year, 'compteId' => $compteId));
+        
         
         
         /* en DQL

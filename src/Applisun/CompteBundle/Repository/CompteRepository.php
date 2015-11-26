@@ -40,6 +40,18 @@ class CompteRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    public function getCompteByUserNotTypeAndYear(array $parameters){
+        $qb = $this->createQueryBuilder('c')
+                ->leftJoin('c.evolutions', 'e')
+                ->where('c.user = :userId')
+                ->andWhere('c.type != :type')
+                ->andWhere('YEAR(e.created_at) = :year')
+                ->orderBy('c.type', 'ASC')
+                ->setParameters(array('userId' => $parameters['user']->getId(), 'type' => $parameters['type'], 'year' => $parameters['year']));
+ 
+        return $qb->getQuery()->getResult();
+    }
+    
     public function getCompteByUserNotCompteId(array $parameters)
     {
         $qb = $this->createQueryBuilder('c')
