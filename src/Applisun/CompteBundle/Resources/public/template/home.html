@@ -1,27 +1,85 @@
-<select name="order" ng-model="ordre">
-    <option value="createdat">Date</option>
-    <option value="montant">Montant</option>
-    <option value="libelle">Libellé</option>
-</select>  
-<select name="trier" ng-model="tri">
-    <option value="all" selected="selected">Tout</option>
-    <option value=0>Debit</option>
-    <option value=1>Credit</option>
-</select> 
+<div class="row">
+
+    <div class="col-xs-6">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 ng-click="isCollapsedOrder = !isCollapsedOrder">Ordre<span class="glyphicon" ng-class="{'glyphicon-arrow-down red':!isCollapsedOrder, 'glyphicon-arrow-up green':isCollapsedOrder}"></span></h4>
+                <div uib-collapse="isCollapsedOrder">
+                    <div class="form-group">
+                        <label></label>
+                        <select class="form-control" name="order" ng-model="ordre">
+                            <option value="createdat">Date</option>
+                            <option value="montant">Montant</option>
+                            <option value="libelle">Libellé</option>
+                        </select>
+                        Croissant: <input type="checkbox" ng-model="reverse">
+                    </div>
+                </div>    
+            </div>
+        </div>    
+        <div class="row">
+                <div class="col-xs-12">
+                    <label>Rechercher une opération : </label>
+                    <input placeholder="Libellé ou montant..." class="form-control" type="text" ng-model="searchText" />
+                </div>
+        </div>   
+    </div>
+
+        <div class="col-xs-6">
+            <h4 ng-click="isCollapsedTri = !isCollapsedTri">Tri<span class="glyphicon" ng-class="{'glyphicon-arrow-down red':!isCollapsedTri, 'glyphicon-arrow-up green':isCollapsedTri}"></span></h4>
+            <div uib-collapse="isCollapsedTri">
+                <div class="form-group">
+                    <select class="form-control" name="trier" ng-model="tri">
+                        <option value="all" selected="selected">Tout</option>
+                        <option value=0>Debit</option>
+                        <option value=1>Credit</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tri par mois :</label> <select class="form-control" name="trier" ng-model="triMonth" ng-change="changeMonth()">
+                        <option value='all'>Année entière</option>
+                        <option ng-repeat="month in months" value="[[ $index+1 ]]">[[ month ]]</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Trier par type d'opération: </label>
+                    <select class="form-control" name="trier" ng-model="triType">
+                        <option value="all" selected="selected">Tous les types</option>
+                        <option value="Alimentation">Alimentation</option>
+                        <option value="Assurance">Assurance</option>
+                    </select> 
+                </div>
+            </div>
+        </div>    
+</div>
+
+<button ng-click="cleanCache()">Vider le cache</button>
+<button ng-click="reset()">Reset</button>
 <div class="row">
     <div class="col-xs-12">
             <uib-tabset>
             <uib-tab ng-repeat="info in data">
-            <uib-tab-heading>[[ info.nom ]] - [[ info.solde ]] &euro;</uib-tab-heading>
-            <h4>Ordonné par [[ ordre ]]</h4> 
-            <a href="#/graphic/[[ info.id ]]">Voir le graphique</a>
+                <uib-tab-heading><img src="[[ path_img ]][[ info.banque.logo ]]" />[[ info.nom ]] <br> [[ info.solde ]] &euro;</uib-tab-heading>
+                <a data-tooltip="Graphique" data-placement="bottom" class="btn btn-lg btn-success" href="#/graphic/[[ info.id ]]">
+                 <span class="glyphicon glyphicon-signal"></span>Voir le graphique
+                </a> 
             <div class="row">
-                <div class="col-xs-6" >
-                    <h4>Liste des opérations</h4>
-                <ul>
-                    <li ng-repeat="ope in info.operations | filter:{type_operation:tri}:filterOpe | orderBy:'-'+ordre:true">[[ ope.created_at | date:"dd/MM/yyyy 'à' h:mma" ]] - [[ ope.type_operation.type ]] - [[ ope.montant ]] - [[ ope.libelle ]]</li></ul>
+                <div scroll-position id="ope_div" class="col-sm-6" >
+                    <h4>Liste des opérations <span ng-show="triMonth!=='all'">du mois de [[ months[triMonth-1] ]] </span></h4>
+                    <div class="row first">
+                        <div class="col-xs-4">Date</div>
+                        <div class="col-xs-4">Libelle</div>
+                        <div class="col-xs-2">Type</div>
+                        <div class="col-xs-2">Montant</div>
+                    </div>
+                    <div class="row p-bottom animate-repeat" ng-repeat="ope in info.operations | filter:{created_at:triMonth}:filterOpeByMonth | filter:searchText:startWith | filter:{type_operation:triType}:filterOpeByType | filter:{type_operation:tri}:filterOpe | orderBy:'-'+ordre:reverse | limitTo: limit">
+                        <div class="col-xs-4">[[ ope.created_at | date:"dd MMMM yyyy" ]]</div>
+                        <div class="col-xs-4">[[ ope.libelle ]]</div>
+                        <div class="col-xs-2">[[ ope.type_operation.type ]]</div>
+                        <div class="col-xs-2"><span ng-class="{red:ope.type_operation.is_debit, green:!ope.type_operation.is_debit}">[[ ope.montant ]]&euro;</span></div>
+                    </div>
                 </div>
-                <div class="col-sx-6">
+                <div class="col-sm-6">
                     <h4>Répartition des opérations</h4>
                     <pierepart num="[[ $index ]]" compteId="[[ info.id ]]"></pierepart>
                 </div>

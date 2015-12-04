@@ -40,7 +40,7 @@ class GraphicController extends Controller{
         );
 
         $ob = new HighchartCompte();
-        $ob->chart->renderTo($id.'chart');  
+        $ob->chart->renderTo('chart'.$id);  
         $ob->title->text('');
         
         $ob->yAxis->title(array('text' => "Solde"));
@@ -54,7 +54,7 @@ class GraphicController extends Controller{
         $firstOpe = $em->getRepository('ApplisunCompteBundle:Operation')->getOperationFirstByCompte($id);
 
         return $this->render('ApplisunCompteBundle:Graphic:graphicCompte.html.twig', array(
-            'linechart' => $ob, 'eltId' => $id.'chart', 'entity' => $entity, 'year' => $year, 'firstYear' => ($firstOpe?date('Y', $firstOpe->getCreatedAt()->getTimeStamp()):date('Y', time()))
+            'linechart' => $ob, 'eltId' => 'chart'.$id, 'entity' => $entity, 'year' => $year, 'firstYear' => ($firstOpe?date('Y', $firstOpe->getCreatedAt()->getTimeStamp()):date('Y', time()))
         ));
     }
     
@@ -75,7 +75,7 @@ class GraphicController extends Controller{
         }
                 
         $ob = new HighchartCompte();
-        $ob->chart->renderTo($month.'pie');  
+        $ob->chart->renderTo('pie'.$month);  
         $ob->title->text('');
         $ob->navigation(array("buttonOptions" => array("enabled" => false)));
         
@@ -95,7 +95,7 @@ class GraphicController extends Controller{
         
         $ob->series($data);
         
-        $response = $this->render('ApplisunCompteBundle:Graphic:operation_listForPlot.html.twig', array( 'operations' => $operations, 'piechart' => $ob, 'eltId' => $month.'pie' ));
+        $response = $this->render('ApplisunCompteBundle:Graphic:operation_listForPlot.html.twig', array( 'operations' => $operations, 'piechart' => $ob, 'eltId' => 'pie'.$month ));
         
         return $response;
     }

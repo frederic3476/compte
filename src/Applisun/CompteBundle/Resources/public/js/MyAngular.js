@@ -8,7 +8,7 @@ date = new Date();
 var year = date.getFullYear(); 
 
 Date.prototype.getFullDateFr = function(){
-    return this.getDay()+' '+months[this.getMonth()]+' '+this.getFullYear();
+    return this.getDate('dd/MM/YY');
 };
 
 Array.prototype.pushArray = function(arr) {
@@ -21,9 +21,12 @@ Date.prototype.getDateFr = function(){
     
 var myapp = angular.module('MyApp', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'highcharts-ng']);    
 
-myapp.run(function ( $rootScope, $window, QUERY ) {
+myapp.run(function ( $rootScope, $window, QUERY, $timeout) {
     $rootScope.data = [];
+    $rootScope.path = path;
+    $rootScope.path_img = path_img;
     $rootScope.userId = $window.userId;
+    $rootScope.months = months;
                 
                 QUERY.getAccountsByUser($rootScope.userId, year).then(function(result){
                     $rootScope.data = result;
@@ -34,33 +37,60 @@ myapp.run(function ( $rootScope, $window, QUERY ) {
                         });
                         QUERY.getEvolutionByCompte(compteId, year).then(function(res2){
                                 dat.evolutions= res2;                                
-                            });
-                        QUERY.getOperationByType(0, year, compteId).then(function(res3){
-                           dat.repartitions= res3; 
-                           //$rootScope.$broadcast('dataSuccess');
-                        });
+                            });                        
                     });
                         });
                         
-    $rootScope.getRepart = function (dataJson){
+    $rootScope.getDataForPie = function (dataJson){
         repart = [];
         for (var i in dataJson){
-            dArray = [dataJson[i].type, dataJson[i].somme];
-            repart.pushArray(dArray);
+            //dArray = [dataJson[i].type, dataJson[i].somme];
+            if (dataJson[i].somme){
+                repart.push({name: dataJson[i].type, y: parseFloat(dataJson[i].somme)});
+            }
         }
         
         return repart;
     }
     
-    
+    $rootScope.startWith = function (actual, expected) {
+        var lowerStr = (actual + "").toLowerCase();
+        return lowerStr.indexOf(expected.toLowerCase()) === 0;
+    }
     
 });
     
-myapp.controller('MyController', function ($scope, $routeParams, QUERY) {  
+myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $templateCache, $timeout) {  
   $scope.ordre = 'createdat';
   $scope.tri = 'all';
+  $scope.triMonth = 'all';
+  $scope.triType = 'all';
+  $scope.searchText= '';
   $scope.repart= [];
+  $scope.limit = 15;
+  $scope.reverse = false;
+  $scope.isCollapsedTri = true;
+  $scope.isCollapsedOrder = true;
+  
+  $scope.console ='';
   year = $routeParams.year;
+  
+  $timeout(function(){$rootScope.$broadcast('changeMonth')}, 500);
+  
+  $scope.$on('eventTypeChange', function(event, data){
+      $scope.$apply(function(){
+        $scope.triType = data.type;
+      });
+  }
+          );
+  
+  $scope.reset= function(){
+        $scope.ordre = 'createdat';
+        $scope.tri = 'all';
+        $scope.triMonth = 'all';
+        $scope.triType = 'all';
+        $scope.searchText= '';
+  }
   
   $scope.filterOpe = function (actual, expected) {
         var isDebit = actual.is_debit;        
@@ -69,6 +99,30 @@ myapp.controller('MyController', function ($scope, $routeParams, QUERY) {
             return true;                    
         return false;
     };
+    
+  $scope.filterOpeByType = function (actual, expected) {
+        var type = actual.type;        
+        if (expected === 'all') return true;
+        return type === expected;
+    };  
+    
+  $scope.filterOpeByMonth = function (actual, expected) {     
+      
+      if (expected === 'all') return true;
+        date = new Date(actual);
+        var m = date.getMonth(); 
+        
+        return m === parseInt(expected)-1;
+    };   
+    
+  $scope.changeMonth = function(){       
+      //broadcast an event for plot
+      $rootScope.$broadcast('changeMonth');
+  };  
+    
+   $scope.cleanCache = function() { 
+        $templateCache.removeAll();
+  } 
 });
 
 myapp.controller('GraphicController', function ($scope, $routeParams, $rootScope, QUERY) {
@@ -78,7 +132,7 @@ myapp.controller('GraphicController', function ($scope, $routeParams, $rootScope
     $scope.items.evo = [];
     $scope.dat = months;
     $scope.interval = 'month';
-    $scope.format = 'dd-MMMM-yyyy';
+    $scope.format = 'dd-MMMM-yyyy';   
     
     $scope.initValue = function(){
         for (var i in $rootScope.data){
@@ -91,15 +145,6 @@ myapp.controller('GraphicController', function ($scope, $routeParams, $rootScope
             }
         }
     };
-    
-    
-    var a = [];
-
-    a.push("1","2");
-    
-    a.push("3","4");
-    
-    alert(a);
     
     $scope.initValue();
     
@@ -213,11 +258,11 @@ myapp.config(function ($interpolateProvider) {
   
 myapp.config(function ($routeProvider) {  
     $routeProvider.when("/home/?:year", {
-        templateUrl: 'http://localhost/compte/web/bundles/applisuncompte/template/home.html',
+        templateUrl: path+'/template/home.html',
         controller: 'MyController'
     })
             .when("/graphic/:compteId", {
-        templateUrl: 'http://localhost/compte/web/bundles/applisuncompte/template/graphic.html',
+        templateUrl: path+'/template/graphic.html',
         controller: 'GraphicController'
     })
     .otherwise({
@@ -232,36 +277,68 @@ myapp.config(function ($routeProvider) {
         template: '<highchart id="chart-repart-[[ number ]]" config="cConfig" class="span10"></highchart>',
         link: function(scope,element, attr){ 
                 scope.number = attr.num;
-                QUERY.getOperationByType(0, year, attr.compteid).then(function(res){                    
-                    //alert(result);
-                        result = scope.getRepart(res);
-                        alert(result);
-                        $timeout(function(){
+                scope.$on('changeMonth', function(event){                   
+                   m =(scope.triMonth != 'all'?scope.triMonth:0);                   
+                   
+                   QUERY.getOperationByType(m, year, attr.compteid).then(function(res){  
                             scope.cConfig = {
                                     options: {
                                         chart: {
-                                            type: 'pie'
+                                            type: 'pie',
+                                            options3d: {
+                                                enabled: true,
+                                                alpha: 45,
+                                                beta: 0
+                                            },
+                                            height: 300
 
                                         },
                                         plotOptions: {
-                                            column: {
+                                            pie: {
+                                                allowPointSelect: true,
+                                                cursor: 'pointer',
+                                                size: 300,
                                                 dataLabels: {
-                                                    enabled: false
-                                                },
-                                                showInLegend: true
+                                                    enabled: true,
+                                                    format: '{point.name}: {point.y:.1f}€'
+                                                }
+                                            },
+                                            series: {
+                                                cursor: 'pointer',
+                                                point: {
+                                                    events: {
+                                                        click: function () {                                                            
+                                                            $rootScope.$broadcast('eventTypeChange', {type: this.name});
+                                                        }
+                                                    }
+                                                }
                                             }
-                                        }
+                                        },
                                     },
                                     series: [{
-                                        data: scope.getRepart(res)
-                                    }]
+                                        colorByPoint: true,    
+                                        data: scope.getDataForPie(res)                              
+                                    }],
+                                    loading: false
                                 }
-                            }, 300);
-                    //highchartController.setConfig(myConfig);
-                   //scope.cConfig.series[0].data = result;
             });
+                });
+                
     }
      };
  });
+ 
+ myapp.directive('scrollPosition', function () {
+  return function (scope, element, attrs) {      
+    var div = element[0];
+    angular.element(div).bind('scroll', function () {                  
+      scope.$apply(function () {                
+        if (div.scrollTop + div.offsetHeight >= div.scrollHeight) {          
+          scope.limit = scope.limit + 5;
+        }
+      });
+    });
+  }
+});
 
 

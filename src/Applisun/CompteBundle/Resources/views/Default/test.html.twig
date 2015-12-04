@@ -11,6 +11,8 @@
     {% block javascripts %}
         <script>
             window.userId = {{ app.security.getToken().getUser().getId() }};
+            var path = "{{ asset('bundles/applisuncompte/') }}";
+            var path_img = "{{ asset('uploads/banques/') }}";
         </script>
         <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/applisuncompte/js/bootstrap.js') }}"></script>
@@ -27,9 +29,10 @@
     <link rel="shortcut icon" href="" />
   </head>
   <body ng-controller="MyController">
-          <div class="row no-padding no-margin">
+      
               <h1>Comptes de {{ app.security.getToken().getUser().getUsername() }} </h1>
               <input type="hidden" ng-model="userId"/>
+          <div class="row container-fluid">
               <div class="view-animate" ng-view></div>
           </div>      
   </body>
