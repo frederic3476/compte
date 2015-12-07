@@ -1,4 +1,8 @@
-myapp.factory('QUERY', function($http){
+myapp.factory('QUERY', function($http, $q){
+    //add a promise to cancel http request if an another is launched
+    var self = this;
+    self.canceller = null;
+    
     return {
         getAccountsByUser: function(userId, year){
         promise = $http({
@@ -27,22 +31,26 @@ myapp.factory('QUERY', function($http){
         },
         
         getOperationByType: function(month, year, compteId){
-            promise = $http({
+            
+            var deffered = $q.defer();
+            
+            $http({
                 url: api_url+"operation/by/type.json?month="+month+"&year="+year+"&compteId="+compteId,
                 method: "GET"
-            }).then(function(response){
-                return response.data;                                
-            },function(error){
-                alert(JSON.stringify(error));
+            }).success(function(response){
+                deffered.resolve(response);                                
+            }).error(function(error){
+                deffered.reject(error);
             }
                     );
-            return promise;
+            return deffered.promise;
         },
         
         getEvolutionByCompte: function(compteId, year){
             promise = $http({
                 url: api_url+"evolution/list.json?year="+year+"&compteId="+compteId,
-                method: "GET"
+                method: "GET",
+                cache : true,
             }).then(function(response){
                 return response.data; 
             },function(error){
@@ -53,9 +61,29 @@ myapp.factory('QUERY', function($http){
         },
         
         getEvolutionByCompteAndDay: function(compteId, year){
+            
+            if (self.canceller){
+                self.canceller.resolve("une autre requête a été lancée");
+            }
+            self.canceller = $q.defer();
+            
             promise = $http({
                 url: api_url+"evolution/by/day.json?year="+year+"&compteId="+compteId,
-                method: "GET"
+                method: "GET",
+                timeout: self.canceller.promise
+            }).then(function(response){
+                return response.data; 
+            },function(error){
+                alert(JSON.stringify(error));
+            }
+                    );
+            return promise;
+        },
+        
+        putOperation: function(opeId){
+            promise = $http({
+                url: api_url+"evolution/by/day.json?year="+year+"&compteId="+compteId,
+                method: "PUT"
             }).then(function(response){
                 return response.data; 
             },function(error){

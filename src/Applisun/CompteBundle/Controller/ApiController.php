@@ -228,5 +228,63 @@ class ApiController extends Controller {
         
         return new response($data, 200);
     }
+    
+    
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modify operation",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when errors"
+     *   }
+     * )
+     * 
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @QueryParam(name="id", nullable=false, strict=true, description="id")
+     * @QueryParam(name="libelle", nullable=false, strict=true, description="libelle")
+     * @QueryParam(name="type", nullable=false, strict=true, description="type")
+     * @QueryParam(name="montant", nullable=false, strict=true, description="montant")
+     */
+    public function putOperationAction(ParamFetcher $paramFetcher)
+    {
+        $operation = $this->getDoctrine()->getRepository('ApplisunCompteBundle:Operation')->find($paramFetcher->get('id'));
+        
+        if (!$operation){
+            throw $this->createNotFoundException('Unable to find Operation entity.');
+        }
+        
+        $serializer = $this->get('jms_serializer');
+        $data = $serializer->serialize($operations, "json");
+        
+        return new response($data, 200);
+    }
+    
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Delete operation",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when errors"
+     *   }
+     * )
+     * 
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @QueryParam(name="id", nullable=false, strict=true, description="id")
+     */
+    public function deleteOperationAction(ParamFetcher $paramFetcher)
+    {
+        $operation = $this->getDoctrine()->getRepository('ApplisunCompteBundle:Operation')->find($paramFetcher->get('id'));
+        
+        if (!$operation){
+            throw $this->createNotFoundException('Unable to find Operation entity.');
+        }
+        
+        $serializer = $this->get('jms_serializer');
+        $data = $serializer->serialize($operations, "json");
+        
+        return new response($data, 200);
+    }
 }
 

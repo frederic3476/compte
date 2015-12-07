@@ -60,7 +60,7 @@ myapp.run(function ( $rootScope, $window, QUERY, $timeout) {
     
 });
     
-myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $templateCache, $timeout) {  
+myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $templateCache, $timeout, $q) {  
   $scope.ordre = 'createdat';
   $scope.tri = 'all';
   $scope.triMonth = 'all';
@@ -72,10 +72,12 @@ myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $te
   $scope.isCollapsedTri = true;
   $scope.isCollapsedOrder = true;
   
+  $scope.firstOpe = true;
+  
   $scope.console ='';
   year = $routeParams.year;
   
-  $timeout(function(){$rootScope.$broadcast('changeMonth')}, 500);
+  $timeout(function(){$rootScope.$broadcast('changeMonth')}, 1000);
   
   $scope.$on('eventTypeChange', function(event, data){
       $scope.$apply(function(){
@@ -117,12 +119,46 @@ myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $te
     
   $scope.changeMonth = function(){       
       //broadcast an event for plot
-      $rootScope.$broadcast('changeMonth');
+      alert('change');
+      if (!$scope.firstOpe){
+          alert('notfirst');
+        $rootScope.$broadcast('changeMonth');
+      }
+      else{
+          alert('first');
+        $timeout(function(){$rootScope.$broadcast('changeMonth')}, 1000);
+      }
+      
+      $scope.firstOpe = false;
   };  
     
    $scope.cleanCache = function() { 
         $templateCache.removeAll();
-  } 
+  }
+  
+  $scope.testPromise = function(num){
+      var deffered = $q.defer();
+      
+      setTimeout(function(){
+         if (num>0){
+            prod = num*456215565221*4565221*55142565221552;
+            deffered.resolve({result: prod});
+         }
+         else{
+             deffered.reject({result: "num invalide"});
+         }
+      }, 2000);
+      
+      return deffered.promise;
+  }
+  
+  $scope.testB = function(num){
+      $scope.testPromise(num).then(function(result){
+          alert(result.result);
+      })
+      
+  }
+  
 });
 
 myapp.controller('GraphicController', function ($scope, $routeParams, $rootScope, QUERY) {
@@ -280,7 +316,7 @@ myapp.config(function ($routeProvider) {
                 scope.$on('changeMonth', function(event){                   
                    m =(scope.triMonth != 'all'?scope.triMonth:0);                   
                    
-                   QUERY.getOperationByType(m, year, attr.compteid).then(function(res){  
+                   QUERY.getOperationByType(m, year, attr.compteid).then(function(res){
                             scope.cConfig = {
                                     options: {
                                         chart: {
