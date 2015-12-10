@@ -45,8 +45,7 @@
                     <label>Trier par type d'opération: </label>
                     <select class="form-control" name="trier" ng-model="triType">
                         <option value="all" selected="selected">Tous les types</option>
-                        <option value="Alimentation">Alimentation</option>
-                        <option value="Assurance">Assurance</option>
+                        <option ng-repeat="type in types" value="[[ type.type ]]">[[ type.type ]]</option>
                     </select> 
                 </div>
             </div>
@@ -61,25 +60,31 @@ FirstOpe: <input type="checkbox" ng-model="firstOpe">
     <div class="col-xs-12">
             <uib-tabset>
             <uib-tab ng-repeat="info in data">
-                <uib-tab-heading><img src="[[ path_img ]][[ info.banque.logo ]]" />[[ info.nom ]] <br> [[ info.solde ]] &euro;</uib-tab-heading>
+                <uib-tab-heading><img src="[[ path_img ]][[ info.banque.logo ]]" />[[ info.nom ]] <br> [[ info.solde | currency ]]</uib-tab-heading>
                 <a data-tooltip="Graphique" data-placement="bottom" class="btn btn-lg btn-success" href="#/graphic/[[ info.id ]]">
                  <span class="glyphicon glyphicon-signal"></span>Voir le graphique
-                </a> 
+                </a>
+                <form name="newOpeForm" ng-submit="valNew()">
+                    <input name="compteid" type="hidden" value="[[ info.id ]]">
+                    <input type="text" name="newLibelle" ng-model="new.libelle" required>
+                    <select name="newType" ng-model="new.type" required>                        
+                        <option ng-repeat="type in types" value="[[ type.type ]]">[[ type.type ]]</option>
+                    </select>
+                    <input type="number" name="newMontant" ng-model="new.montant" required >
+                    <input type="submit" ng-disabled="newOpeForm.$invalid" value="Ajouter">
+                </form>
             <div class="row">
                 <div scroll-position id="ope_div" class="col-sm-6" >
                     <h4>Liste des opérations <span ng-show="triMonth!=='all'">du mois de [[ months[triMonth-1] ]] </span></h4>
                     <div class="row first">
-                        <div class="col-xs-4">Date</div>
-                        <div class="col-xs-4">Libelle</div>
+                        <div class="col-xs-3">Date</div>
+                        <div class="col-xs-3">Libelle</div>
                         <div class="col-xs-2">Type</div>
                         <div class="col-xs-2">Montant</div>
+                        <div class=""col-xs-2><button ng-click="edit = !edit"><span ng-class="{'glyphicon glyphicon-pencil':!edit, 'glyphicon glyphicon-remove':edit}"></span></button></div>
                     </div>
-                    <div class="row p-bottom animate-repeat" ng-repeat="ope in info.operations | filter:{created_at:triMonth}:filterOpeByMonth | filter:searchText:startWith | filter:{type_operation:triType}:filterOpeByType | filter:{type_operation:tri}:filterOpe | orderBy:'-'+ordre:reverse | limitTo: limit">
-                        <div class="col-xs-4">[[ ope.created_at | date:"dd MMMM yyyy" ]]</div>
-                        <div class="col-xs-4">[[ ope.libelle ]]</div>
-                        <div class="col-xs-2">[[ ope.type_operation.type ]]</div>
-                        <div class="col-xs-2"><span ng-class="{red:ope.type_operation.is_debit, green:!ope.type_operation.is_debit}">[[ ope.montant | currency ]]</span></div>
-                    </div>
+                        <div ng-if="!edit" ng-include=path+"/template/view.html"></div>
+                        <div ng-if="edit" ng-include=path+"/template/edit.html"></div>
                 </div>
                 <div class="col-sm-6">
                     <h4>Répartition des opérations</h4>
@@ -89,5 +94,4 @@ FirstOpe: <input type="checkbox" ng-model="firstOpe">
             </uib-tab>
             </uib-tabset>
     </div>
-    
 </div>

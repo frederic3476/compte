@@ -227,13 +227,37 @@ class ApiController extends Controller {
         $data = $serializer->serialize($operations, "json");
         
         return new response($data, 200);
+    }        
+    
+    
+    
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "list of typeoperation",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when errors"
+     *   }
+     * )
+     * 
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     */
+    public function getTypeOperationAction(ParamFetcher $paramFetcher)
+    {
+        $tOperations = $this->getDoctrine()->getRepository('ApplisunCompteBundle:TypeOperation')->findAll();
+                
+        $serializer = $this->get('jms_serializer');
+        $data = $serializer->serialize($tOperations, "json");
+        
+        return new response($data, 200);
     }
     
     
     /**
      * @ApiDoc(
      *   resource = true,
-     *   description = "Modify operation",
+     *   description = "Get operation",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when errors"
@@ -242,22 +266,20 @@ class ApiController extends Controller {
      * 
      * @param ParamFetcher $paramFetcher Paramfetcher
      * @QueryParam(name="id", nullable=false, strict=true, description="id")
-     * @QueryParam(name="libelle", nullable=false, strict=true, description="libelle")
-     * @QueryParam(name="type", nullable=false, strict=true, description="type")
-     * @QueryParam(name="montant", nullable=false, strict=true, description="montant")
      */
-    public function putOperationAction(ParamFetcher $paramFetcher)
+    public function getOperationAction(ParamFetcher $paramFetcher)
     {
+        $view = View::create();
         $operation = $this->getDoctrine()->getRepository('ApplisunCompteBundle:Operation')->find($paramFetcher->get('id'));
         
         if (!$operation){
-            throw $this->createNotFoundException('Unable to find Operation entity.');
+            $view->setData('Opération non trouvé');
+            $view->setStatusCode(400);
+            return $view;
         }
-        
-        $serializer = $this->get('jms_serializer');
-        $data = $serializer->serialize($operations, "json");
-        
-        return new response($data, 200);
+        $view->setData($operation);
+        $view->setStatusCode(200);
+        return $view;
     }
     
     /**
@@ -275,16 +297,94 @@ class ApiController extends Controller {
      */
     public function deleteOperationAction(ParamFetcher $paramFetcher)
     {
+        $view = View::create();
         $operation = $this->getDoctrine()->getRepository('ApplisunCompteBundle:Operation')->find($paramFetcher->get('id'));
         
         if (!$operation){
-            throw $this->createNotFoundException('Unable to find Operation entity.');
+            $view->setData('Opération non trouvé');
+            $view->setStatusCode(400);
+            return $view;
+        }
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->remove($operation);
+        $em->flush();
+        $view->setData('Opération supprimée');
+        $view->setStatusCode(200);
+        return $view;
+    }
+    
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modify operation",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when errors"
+     *   }
+     * )
+     * 
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @RequestParam(name="id", nullable=false, strict=true, description="id")
+     * @RequestParam(name="libelle", nullable=false, strict=true, description="libelle")
+     * @RequestParam(name="montant", nullable=false, strict=true, description="montant")
+     * @RequestParam(name="typeOperation", nullable=false, strict=true, description="operation typ")
+     */
+    public function putOperationAction(ParamFetcher $paramFetcher)
+    {
+        $view = View::create();
+        $operation = $this->getDoctrine()->getRepository('ApplisunCompteBundle:Operation')->find($paramFetcher->get('id'));
+        
+        if (!$operation){
+            $view->setData('Opération non trouvée');
+            $view->setStatusCode(400);
+            return $view;
+        }
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->flush();
+        $view->setData('Opération modifiée');
+        $view->setStatusCode(200);
+        return $view;
+    }
+    
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "New operation",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when errors"
+     *   }
+     * )
+     * 
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @RequestParam(name="compteid", nullable=false, strict=true, description="id compte")
+     * @RequestParam(name="libelle", nullable=false, strict=true, description="libelle")
+     * @RequestParam(name="montant", nullable=false, strict=true, description="montant")
+     * @RequestParam(name="typeOperation", nullable=false, strict=true, description="operation typ")
+     */
+    public function postOperationAction(ParamFetcher $paramFetcher)
+    {
+        $view = View::create();
+        
+        $ope = new Operation();
+        
+        $em = $this->getDoctrine()->getManager();
+        $compte = $this->getDoctrine()->getRepository('ApplisunCompteBundle:Compte')->find($paramFetcher->get('compteid'));
+        if (!$compte){
+            $view->setData('Compte non trouvée');
+            $view->setStatusCode(400);
+            return $view;
         }
         
-        $serializer = $this->get('jms_serializer');
-        $data = $serializer->serialize($operations, "json");
         
-        return new response($data, 200);
+        
+        $em->flush();
+        $view->setData('Opération modifiée');
+        $view->setStatusCode(200);
+        return $view;
     }
+    
 }
 

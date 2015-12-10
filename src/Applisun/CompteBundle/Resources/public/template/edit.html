@@ -1,0 +1,15 @@
+<form name="formOpe-[[ $index ]]" ng-submit="valForm(ope)">
+    <div class="row p-bottom animate-repeat" ng-form="opeForm" ng-repeat="ope in info.operations | filter:{created_at:triMonth}:filterOpeByMonth | filter:searchText:startWith | filter:{type_operation:triType}:filterOpeByType | filter:{type_operation:tri}:filterOpe | orderBy:'-'+ordre:reverse | limitTo: limit">
+        <input type="hidden" name="id-[[ $index ]]" value="[[ ope.id ]]">
+        <div class="col-xs-3">[[ ope.created_at | date:"dd MMMM yyyy" ]]</div>
+        <div class="col-xs-3"><input class="form-control" name="lib-[[ $index ]]" type="text" value="[[ ope.libelle ]]" required /></div>
+        <div class="col-xs-3">
+            <select name="trier"  required>                        
+                  <option ng-repeat="type in types" ng-selected="ope.type_operation.type == type.type" value="[[ type.type ]]">[[ type.type ]]</option>
+            </select> 
+        </div>
+        <div class="col-xs-2"><input class="form-control" name="montant-[[ $index ]]" type="text" value="[[ ope.montant ]]" required /></div>
+        <div class="col-xs-2"><input type="submit" ng-disabled="opeForm.$invalid" name="edite" value="Editer"></div>
+        <input type="button" name="delete" value="Supprimer" ng-click="deleteOpe(ope, $parent.$parent.$index)">
+    </div>
+</form>

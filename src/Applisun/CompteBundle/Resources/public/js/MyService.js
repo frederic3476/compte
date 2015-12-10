@@ -80,10 +80,10 @@ myapp.factory('QUERY', function($http, $q){
             return promise;
         },
         
-        putOperation: function(opeId){
+        getTypeOperation: function(){
             promise = $http({
-                url: api_url+"evolution/by/day.json?year="+year+"&compteId="+compteId,
-                method: "PUT"
+                url: api_url+"type/operation.json",
+                method: "GET"
             }).then(function(response){
                 return response.data; 
             },function(error){
@@ -93,6 +93,10 @@ myapp.factory('QUERY', function($http, $q){
             return promise;
         }
     }
+});
+
+myapp.factory('OPERATION', function($resource){
+    return $resource(api_url+'operation', {id:'@id'},{ 'update': {method: 'PUT'} });
 });
 
 

@@ -1,0 +1,7 @@
+<div class="row p-bottom animate-repeat" ng-repeat="ope in info.operations | filter:{created_at:triMonth}:filterOpeByMonth | filter:searchText:startWith | filter:{type_operation:triType}:filterOpeByType | filter:{type_operation:tri}:filterOpe | orderBy:'-'+ordre:reverse | limitTo: limit">
+    <div class="col-xs-3">[[ ope.created_at | date:"dd MMMM yyyy" ]]</div>
+    <div class="col-xs-3">[[ ope.libelle ]]</div>
+    <div class="col-xs-2">[[ ope.type_operation.type ]]</div>
+    <div class="col-xs-2"><span ng-class="{red:ope.type_operation.is_debit, green:!ope.type_operation.is_debit}">[[ ope.montant | currency ]]</span></div>
+    <div class="col-xs-2"></div>
+</div>

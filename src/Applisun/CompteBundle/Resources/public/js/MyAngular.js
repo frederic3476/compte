@@ -19,7 +19,7 @@ Date.prototype.getDateFr = function(){
     return months[this.getMonth()]+' '+this.getFullYear();
 }
     
-var myapp = angular.module('MyApp', ['ngAnimate', 'ngRoute', 'ui.bootstrap', 'highcharts-ng']);    
+var myapp = angular.module('MyApp', ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap', 'highcharts-ng']);    
 
 myapp.run(function ( $rootScope, $window, QUERY, $timeout) {
     $rootScope.data = [];
@@ -27,19 +27,25 @@ myapp.run(function ( $rootScope, $window, QUERY, $timeout) {
     $rootScope.path_img = path_img;
     $rootScope.userId = $window.userId;
     $rootScope.months = months;
+    $rootScope.types = [];    
                 
-                QUERY.getAccountsByUser($rootScope.userId, year).then(function(result){
-                    $rootScope.data = result;
-                    angular.forEach($rootScope.data, function(dat){
-                        compteId = dat.id;
-                        QUERY.getOperationByCompte(compteId, year).then(function(res1){
-                            dat.operations= res1;
-                        });
-                        QUERY.getEvolutionByCompte(compteId, year).then(function(res2){
-                                dat.evolutions= res2;                                
-                            });                        
-                    });
-                        });
+    QUERY.getAccountsByUser($rootScope.userId, year).then(function (result) {
+        $rootScope.data = result;
+        angular.forEach($rootScope.data, function (dat) {
+            compteId = dat.id;
+            QUERY.getOperationByCompte(compteId, year).then(function (res1) {
+                dat.operations = res1;
+            });
+            QUERY.getEvolutionByCompte(compteId, year).then(function (res2) {
+                dat.evolutions = res2;
+            });
+        });
+    });
+
+
+    QUERY.getTypeOperation().then(function (res3) {
+        $rootScope.types = res3;
+    }); 
                         
     $rootScope.getDataForPie = function (dataJson){
         repart = [];
@@ -60,7 +66,7 @@ myapp.run(function ( $rootScope, $window, QUERY, $timeout) {
     
 });
     
-myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $templateCache, $timeout, $q) {  
+myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $templateCache, $timeout, $q, QUERY, OPERATION) {  
   $scope.ordre = 'createdat';
   $scope.tri = 'all';
   $scope.triMonth = 'all';
@@ -73,6 +79,7 @@ myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $te
   $scope.isCollapsedOrder = true;
   
   $scope.firstOpe = true;
+  $scope.edit = false;
   
   $scope.console ='';
   year = $routeParams.year;
@@ -84,7 +91,7 @@ myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $te
         $scope.triType = data.type;
       });
   }
-          );
+          );  
   
   $scope.reset= function(){
         $scope.ordre = 'createdat';
@@ -119,13 +126,10 @@ myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $te
     
   $scope.changeMonth = function(){       
       //broadcast an event for plot
-      alert('change');
       if (!$scope.firstOpe){
-          alert('notfirst');
         $rootScope.$broadcast('changeMonth');
       }
       else{
-          alert('first');
         $timeout(function(){$rootScope.$broadcast('changeMonth')}, 1000);
       }
       
@@ -157,6 +161,37 @@ myapp.controller('MyController', function ($scope, $rootScope, $routeParams, $te
           alert(result.result);
       })
       
+  }
+  
+  $scope.valForm = function(ope){
+      //$scope.edit = false;
+  }
+  
+  $scope.new = {};
+  
+  $scope.valNew = function(){
+      ope = new OPERATION();
+      ope.compteid = $scope.newOpeForm.compteid;
+      ope.libelle = $scope.new.libelle;
+      ope.type = $scope.new.type;
+      ope.montant = $scope.new.montant;
+      
+      ope.$save().then(function(newOpe){});
+  }
+  
+  $scope.deleteOpe = function(ope, pindex){
+      $scope.updateSolde(ope, pindex);
+      var index = $rootScope.data[pindex].operations.indexOf(ope);
+      $rootScope.data[pindex].operations.splice(index, 1);
+      
+      OPERATION.delete({id:ope.id}, function(result){
+          alert(result);
+          $timeout(function(){$rootScope.$broadcast('changeMonth')}, 1000);
+      }, function(error){alert(error)});
+  }
+  
+  $scope.updateSolde = function(ope, index){
+      $rootScope.data[index].solde = (ope.type_operation.is_debit?$rootScope.data[index].solde+ope.montant:$rootScope.data[index].solde-ope.montant);
   }
   
 });
@@ -375,6 +410,34 @@ myapp.config(function ($routeProvider) {
       });
     });
   }
+});
+
+myapp.directive('operation', function ($compile) {
+  return {
+        restrict: 'EA',
+        replace: false,
+        scope:{operation:'='},
+        link: function(scope,element, attr){ 
+            scope.sendForm = function(){
+                alert('toto');
+            }
+            var div = element[0];
+            var replaceText = '<form ng-submit="'+scope.sendForm()+'">'+
+                    '<div class="col-xs-3">'+scope.operation.created_at+'</div>'+
+                    '<div class="col-xs-3"><input type="text" value="' +scope.operation.libelle+'" /></div>'+
+                    '<div class="col-xs-2"><input type="text" value="' +scope.operation.libelle+'" /></div>'+
+                    '<div class="col-xs-2"><input type="text" value="' +scope.operation.montant+'" /></div>'+
+                    '<div class="col-xs-2"><input type="submit" value="Editer"></div>'+
+                    '</form>';
+            //var compiled = $compile(replaceText);
+            angular.element(div).on('click', function(event){
+                element.html('');
+                element.append(replaceText);
+            });
+            
+            
+        }
+    }
 });
 
 
